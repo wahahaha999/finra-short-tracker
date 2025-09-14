@@ -1,0 +1,52 @@
+# Render Cron Job Configuration for FINRA Data Fetching
+
+cronJobs:
+  - name: daily-finra-fetch
+    # Run at 6 AM EST, Monday through Friday (weekdays only)
+    schedule: "0 6 * * 1-5"
+    command: node neon-cron-job.js
+    env: node
+    plan: free
+    # Environment variables for cron job
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: finra-postgres
+          property: connectionString
+      - key: LOG_LEVEL
+        value: info
+    # Timeout settings
+    timeoutSeconds: 1800  # 30 minutes max
+    
+  # Optional: Weekly cleanup job
+  - name: weekly-cleanup
+    # Run every Sunday at 2 AM
+    schedule: "0 2 * * 0"
+    command: node -e "console.log('Weekly cleanup placeholder')"
+    env: node
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: finra-postgres
+          property: connectionString
+
+# Cron Schedule Format Reference:
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of the month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * *
+
+# Common Examples:
+# "0 6 * * 1-5"   # 6 AM weekdays
+# "0 */6 * * *"   # Every 6 hours
+# "0 0 * * 0"     # Every Sunday at midnight
+# "30 2 * * *"    # 2:30 AM daily

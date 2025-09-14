@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, TrendingUp, Calendar, Hash } from 'lucide-react';
+import { Database, TrendingUp, Calendar } from 'lucide-react';
 
 interface Stats {
   total_records: number;
@@ -28,15 +28,45 @@ const StatsDashboard: React.FC<StatsDashboardProps> = ({ stats }) => {
     value: string | number;
     subtext?: string;
   }> = ({ icon, label, value, subtext }) => (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center">
-        <div className="p-2 bg-blue-100 rounded-lg">
-          {icon}
+    <div className="card" style={{
+      transition: 'all 0.2s ease',
+      cursor: 'default'
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1 }}>
+          <p style={{
+            fontSize: '0.75rem',
+            fontWeight: '600',
+            color: 'var(--text-muted)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            margin: 0,
+            marginBottom: '0.5rem'
+          }}>{label}</p>
+          <p style={{
+            fontSize: '2rem',
+            fontWeight: '700',
+            color: 'var(--text-primary)',
+            margin: 0,
+            lineHeight: 1.2
+          }}>{value}</p>
+          {subtext && <p style={{
+            fontSize: '0.75rem',
+            color: 'var(--accent-blue)',
+            fontWeight: '500',
+            margin: 0,
+            marginTop: '0.25rem'
+          }}>{subtext}</p>}
         </div>
-        <div className="ml-4">
-          <p className="text-sm font-medium text-gray-600">{label}</p>
-          <p className="text-2xl font-semibold text-gray-900">{value}</p>
-          {subtext && <p className="text-xs text-gray-500">{subtext}</p>}
+        <div style={{
+          padding: '0.75rem',
+          backgroundColor: 'var(--accent-blue)',
+          borderRadius: '10px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {icon}
         </div>
       </div>
     </div>
@@ -45,32 +75,32 @@ const StatsDashboard: React.FC<StatsDashboardProps> = ({ stats }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
       <StatCard
-        icon={<Database className="h-6 w-6 text-blue-600" />}
+        icon={<Database className="h-6 w-6" style={{ color: 'white' }} />}
         label="Total Records"
         value={stats?.total_records.toLocaleString() || '0'}
       />
       
       <StatCard
-        icon={<TrendingUp className="h-6 w-6 text-blue-600" />}
+        icon={<TrendingUp className="h-6 w-6" style={{ color: 'white' }} />}
         label="Unique Symbols"
         value={stats?.unique_symbols.toLocaleString() || '0'}
       />
       
       <StatCard
-        icon={<Calendar className="h-6 w-6 text-blue-600" />}
+        icon={<Calendar className="h-6 w-6" style={{ color: 'white' }} />}
         label="Unique Dates"
         value={stats?.unique_dates.toLocaleString() || '0'}
       />
       
       <StatCard
-        icon={<Calendar className="h-6 w-6 text-blue-600" />}
+        icon={<Calendar className="h-6 w-6" style={{ color: 'white' }} />}
         label="Latest Date"
         value={formatDate(stats?.latest_date || '')}
         subtext="Most recent data"
       />
       
       <StatCard
-        icon={<Calendar className="h-6 w-6 text-blue-600" />}
+        icon={<Calendar className="h-6 w-6" style={{ color: 'white' }} />}
         label="Earliest Date"
         value={formatDate(stats?.earliest_date || '')}
         subtext="Oldest data"

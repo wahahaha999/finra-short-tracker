@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
 import axios from 'axios';
 
 interface SymbolSearchProps {
@@ -7,19 +6,12 @@ interface SymbolSearchProps {
   selectedSymbol: string;
 }
 
-interface SymbolData {
-  symbol: string;
-  date: string;
-  short_volume: number;
-  total_volume: number;
-  short_ratio: number;
-}
 
-const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect, selectedSymbol }) => {
+
+const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [recentData, setRecentData] = useState<SymbolData | null>(null);
 
   useEffect(() => {
     if (searchTerm.length >= 2) {
@@ -33,11 +25,7 @@ const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect, selectedSym
     }
   }, [searchTerm]);
 
-  useEffect(() => {
-    if (selectedSymbol) {
-      fetchRecentData();
-    }
-  }, [selectedSymbol]);
+
 
   const fetchSuggestions = async () => {
     setLoading(true);
@@ -52,16 +40,7 @@ const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect, selectedSym
     }
   };
 
-  const fetchRecentData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3001/api/data/symbol/${selectedSymbol}?limit=1`);
-      if (response.data.data && response.data.data.length > 0) {
-        setRecentData(response.data.data[0]);
-      }
-    } catch (error) {
-      console.error('Error fetching recent data:', error);
-    }
-  };
+
 
   const handleSymbolClick = (symbol: string) => {
     onSymbolSelect(symbol);
@@ -70,30 +49,31 @@ const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect, selectedSym
   };
 
   return (
-    <div className="space-y-4">
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl border border-gray-700 shadow-lg space-y-4">
+
+      
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-5 w-5 text-gray-400" />
-        </div>
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value.toUpperCase())}
           placeholder="Search stock symbol..."
-          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full px-4 py-3 border border-gray-600 rounded-lg leading-5 bg-gray-800/50 placeholder-gray-400 focus:outline-none focus:placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+          style={{ color: 'var(--text-primary)' }}
         />
         {loading && (
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+          <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-600 border-t-blue-400"></div>
           </div>
         )}
         {suggestions.length > 0 && (
-          <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-auto">
+          <ul className="absolute z-10 w-full bg-gray-800 border border-gray-600 rounded-lg mt-2 max-h-60 overflow-auto shadow-xl">
             {suggestions.map((symbol) => (
               <li key={symbol}>
                 <button
                   onClick={() => handleSymbolClick(symbol)}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                  className="w-full text-left px-4 py-3 hover:bg-blue-700 focus:bg-blue-700 focus:outline-none transition-colors font-medium border-b border-gray-700 last:border-b-0"
+                  style={{ backgroundColor: '#2563eb', color: 'white' }}
                 >
                   {symbol}
                 </button>
@@ -101,35 +81,9 @@ const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect, selectedSym
             ))}
           </ul>
         )}
-      </div>
-
-      {selectedSymbol && recentData && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="font-medium text-gray-900 mb-2">{selectedSymbol}</h3>
-          <div className="space-y-1 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Latest Date:</span>
-              <span className="font-medium">{recentData.date}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Bought:</span>
-              <span className="font-medium">{recentData.short_volume.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Sold:</span>
-              <span className="font-medium">{(recentData.total_volume - recentData.short_volume).toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Total Volume:</span>
-              <span className="font-medium">{recentData.total_volume.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Pct Buy:</span>
-              <span className="font-medium">{recentData.short_ratio}%</span>
-            </div>
-          </div>
         </div>
-      )}
+
+
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Download, TrendingUp, Calendar, Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
 import DataDownloader from './components/DataDownloader';
 import SymbolSearch from './components/SymbolSearch';
 import SymbolChart from './components/SymbolChart';
@@ -19,7 +19,6 @@ interface Stats {
 function App() {
   const [selectedSymbol, setSelectedSymbol] = useState<string>('');
   const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchStats();
@@ -42,62 +41,105 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <header className="card" style={{ 
+        margin: 0, 
+        borderRadius: 0, 
+        borderTop: 'none', 
+        borderLeft: 'none', 
+        borderRight: 'none',
+        borderBottom: '1px solid var(--border-primary)',
+        backgroundColor: 'var(--bg-secondary)'
+      }}>
+        <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <TrendingUp className="h-8 w-8 text-blue-600" />
+            <div className="flex items-center space-x-6">
+              <img 
+                src="/header.png" 
+                alt="Dark Pool Intelligence Logo" 
+                style={{
+                  height: '80px',
+                  width: 'auto',
+                  objectFit: 'contain'
+                }}
+              />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dark Pool Intelligence</h1>
-                <p className="text-sm text-gray-600">Real-time short sale data analysis</p>
+                <h1 style={{ 
+                  fontSize: '2.25rem', 
+                  fontWeight: '700', 
+                  color: 'var(--text-primary)',
+                  marginBottom: '0.5rem'
+                }}>Dark Pool Intelligence</h1>
+                <p style={{ 
+                  fontSize: '1rem', 
+                  color: 'var(--text-secondary)',
+                  margin: 0
+                }}>Data provided by Financial Industry Regulatory Authority</p>
               </div>
             </div>
-            <DataDownloader onDownloadComplete={handleDownloadComplete} />
+            <div className="flex items-center space-x-6">
+              <div className="hidden md:flex items-center space-x-3">
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: 'var(--accent-green)',
+                  borderRadius: '50%',
+                  animation: 'pulse 2s infinite'
+                }}></div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ 
+                    fontSize: '0.875rem', 
+                    color: 'var(--text-secondary)',
+                    fontWeight: '500'
+                  }}>Latest Data</span>
+                  {stats?.latest_date && (
+                     <span style={{
+                       fontSize: '0.75rem',
+                       color: 'white',
+                       fontWeight: '400'
+                     }}>
+                      {new Date(stats.latest_date.slice(0,4) + '-' + stats.latest_date.slice(4,6) + '-' + stats.latest_date.slice(6,8)).toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <DataDownloader onDownloadComplete={handleDownloadComplete} />
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <StatsDashboard stats={stats} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <Search className="h-5 w-5 mr-2" />
-                Symbol Analysis
-              </h2>
-              <SymbolSearch 
-                onSymbolSelect={setSelectedSymbol} 
-                selectedSymbol={selectedSymbol} 
-              />
-            </div>
-
-            <div className="mt-6">
-              <TopShortedStocks />
-            </div>
-
-            <div className="mt-6">
-              <DataManagement onDataCleared={fetchStats} />
-            </div>
-          </div>
-
-          <div className="lg:col-span-2">
-            {selectedSymbol ? (
-              <SymbolChart symbol={selectedSymbol} />
-            ) : (
-              <div className="bg-white rounded-lg shadow p-6 h-full flex items-center justify-center">
-                <div className="text-center">
-                  <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Select a Symbol</h3>
-                  <p className="text-gray-600">Search for a stock symbol to view short sale data and trends.</p>
-                </div>
-              </div>
-            )}
+      <main className="max-w-7xl mx-auto px-6" style={{ paddingTop: '3.5rem', paddingBottom: '0rem' }}>
+        <div style={{ marginBottom: '2rem', marginTop: '-1.5rem' }}>
+          <div className="card">
+            <h2 style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              color: 'var(--text-primary)',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <Search className="h-5 w-5 mr-3" style={{ color: 'var(--accent-blue)' }} />
+              Symbol Analysis
+            </h2>
+            <SymbolSearch 
+              onSymbolSelect={setSelectedSymbol} 
+              selectedSymbol={selectedSymbol} 
+            />
           </div>
         </div>
+
+        <div style={{ marginBottom: '2rem' }}>          {selectedSymbol ? (            <SymbolChart symbol={selectedSymbol} />          ) : (            <div className="card" style={{               height: '500px',               display: 'flex',               alignItems: 'center',               justifyContent: 'center'             }}>              <div style={{ textAlign: 'center' }}>                <Search className="h-16 w-16 mx-auto" style={{                   color: 'var(--text-muted)',                   marginBottom: '1rem'                 }} />                <p style={{                   color: 'var(--text-muted)',                   fontSize: '1.125rem'                 }}>                  Select a symbol to view chart                </p>              </div>            </div>          )}        </div>        <div style={{ marginBottom: '2rem' }}>          <StatsDashboard stats={stats} />        </div>        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">          <div>            <TopShortedStocks />          </div>          <div style={{ paddingTop: '1rem' }}>
+            <DataManagement onDataCleared={fetchStats} />
+          </div>        </div>
       </main>
+      
+      <footer style={{ padding: '2rem 0', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <p>© 2025 Dark Pool Intelligence. Professional FINRA data analysis platform by Franck Tey.</p>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -51,49 +51,92 @@ const DataDownloader: React.FC<DataDownloaderProps> = ({ onDownloadComplete }) =
   };
 
   return (
-    <div className="flex flex-col items-end space-y-2">
-      <div className="flex items-center space-x-2">
-        <label className="flex items-center space-x-2 text-sm">
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <label style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '0.5rem',
+          fontSize: '0.875rem',
+          color: 'var(--text-secondary)',
+          fontWeight: '500'
+        }}>
           <input
             type="checkbox"
             checked={useCustomDate}
             onChange={(e) => setUseCustomDate(e.target.checked)}
-            className="rounded"
+            style={{
+              width: '1rem',
+              height: '1rem',
+              accentColor: 'var(--accent-blue)'
+            }}
           />
-          <span>Use custom date</span>
+          <span>Custom date</span>
         </label>
         
         {useCustomDate && (
-          <div className="flex items-center space-x-2">
-            <Calendar className="h-4 w-4 text-gray-500" />
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            backgroundColor: 'var(--bg-secondary)',
+            borderRadius: '6px',
+            padding: '0.5rem 0.75rem',
+            border: '1px solid var(--border-primary)'
+          }}>
+            <Calendar className="h-4 w-4" style={{ color: 'var(--accent-blue)' }} />
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               max={getMaxDate()}
-              className="px-2 py-1 border rounded text-sm"
+              style={{
+                padding: '0.25rem 0.5rem',
+                border: 'none',
+                backgroundColor: 'transparent',
+                color: 'var(--text-primary)',
+                fontSize: '0.875rem',
+                outline: 'none'
+              }}
             />
           </div>
         )}
       </div>
       
-      <div className="flex items-center space-x-4">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <button
           onClick={handleDownload}
           disabled={loading || (useCustomDate && !selectedDate)}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '0.75rem 1.5rem',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            borderRadius: '8px'
+          }}
         >
           {loading ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            <Loader2 className="h-4 w-4 mr-2" style={{ animation: 'spin 1s linear infinite' }} />
           ) : (
             <Download className="h-4 w-4 mr-2" />
           )}
-          {loading ? 'Downloading... (may take 2-3 minutes)' : (useCustomDate ? 'Download Selected Date' : 'Download Latest Data')}
+          {loading ? 'Downloading...' : (useCustomDate ? 'Download Date' : 'Download Latest')}
         </button>
         {message && (
-          <span className={`text-sm ${message.includes('✅') ? 'text-green-600' : 'text-red-600'}`}>
+          <div style={{
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            padding: '0.5rem 0.75rem',
+            borderRadius: '6px',
+            backgroundColor: message.includes('✅') ? 'rgba(56, 161, 105, 0.1)' : 'rgba(229, 62, 62, 0.1)',
+            color: message.includes('✅') ? 'var(--accent-green)' : 'var(--accent-red)',
+            border: `1px solid ${message.includes('✅') ? 'var(--accent-green)' : 'var(--accent-red)'}`,
+            opacity: 0.8
+          }}>
             {message}
-          </span>
+          </div>
         )}
       </div>
     </div>

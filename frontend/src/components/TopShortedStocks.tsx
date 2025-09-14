@@ -29,8 +29,10 @@ const TopShortedStocks: React.FC = () => {
   const fetchAvailableDates = async () => {
     try {
       const response = await axios.get('http://localhost:3001/api/data/dates');
+      console.log('📅 Fetched dates from API:', response.data);
       if (response.data.success && response.data.dates.length > 0) {
         const dates = response.data.dates;
+        console.log('📅 Setting available dates:', dates, 'Count:', dates.length);
         setAvailableDates(dates);
         setSelectedDate(dates[0]); // Default to latest date
       }
@@ -64,9 +66,21 @@ const TopShortedStocks: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-center h-32">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+      <div className="card">
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '8rem' 
+        }}>
+          <div style={{
+            width: '1.5rem',
+            height: '1.5rem',
+            border: '2px solid var(--accent-blue)',
+            borderTop: '2px solid transparent',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }}></div>
         </div>
       </div>
     );
@@ -74,49 +88,117 @@ const TopShortedStocks: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="text-center text-red-600">
-          <p className="text-sm">{error}</p>
+      <div className="card">
+        <div style={{ textAlign: 'center', color: 'var(--accent-red)' }}>
+          <p style={{ fontSize: '0.875rem', margin: 0 }}>{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-          <TrendingDown className="h-5 w-5 mr-2" />
-          Top Short volume in Dark Pool (Bought)
+    <div className="card">
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        marginBottom: '1.5rem' 
+      }}>
+        <h2 style={{
+          fontSize: '1.25rem',
+          fontWeight: '700',
+          color: 'var(--text-primary)',
+          display: 'flex',
+          alignItems: 'center',
+          margin: 0
+        }}>
+          <div style={{
+            padding: '0.5rem',
+            backgroundColor: 'var(--accent-red)',
+            borderRadius: '8px',
+            marginRight: '0.75rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <TrendingDown className="h-5 w-5" style={{ color: 'white' }} />
+          </div>
+          Top Short Volume
         </h2>
         {availableDates.length > 0 && (
-          <select
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-sm border border-gray-300 rounded px-2 py-1"
-          >
-            {availableDates.map(date => (
-              <option key={date} value={date}>
-                {formatDate(date)}
-              </option>
-            ))}
-          </select>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Calendar className="h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+            <select
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              style={{
+                fontSize: '0.875rem',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '6px',
+                backgroundColor: 'var(--bg-secondary)',
+                border: '1px solid var(--border-primary)',
+                color: 'var(--text-primary)'
+              }}
+            >
+              {availableDates.map(date => (
+                <option key={date} value={date}>
+                  {formatDate(date)}
+                </option>
+              ))}
+            </select>
+          </div>
         )}
       </div>
 
       {stocks.length > 0 ? (
-        <div className="space-y-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {stocks.slice(0, 10).map((stock, index) => (
-            <div key={stock.symbol} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <span className="text-sm font-medium text-gray-500 w-6">{index + 1}.</span>
-                <span className="font-medium text-gray-900">{stock.symbol}</span>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-gray-900">
-                  {stock.short_ratio.toFixed(2)}%
+            <div key={stock.symbol} style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '1rem',
+              backgroundColor: 'var(--bg-secondary)',
+              borderRadius: '8px',
+              border: '1px solid var(--border-primary)',
+              transition: 'all 0.2s ease',
+              cursor: 'default'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '2rem',
+                  height: '2rem',
+                  backgroundColor: 'var(--accent-blue)',
+                  borderRadius: '6px'
+                }}>
+                  <span style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '700',
+                    color: 'white'
+                  }}>{index + 1}</span>
                 </div>
-                <div className="text-xs text-gray-500">
+                <span style={{
+                  fontWeight: '700',
+                  fontSize: '1.125rem',
+                  color: 'var(--text-primary)'
+                }}>{stock.symbol}</span>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '700',
+                  color: 'var(--accent-green)'
+                }}>
+                  {stock.short_ratio.toFixed(1)}%
+                </div>
+                <div style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--text-secondary)',
+                  fontWeight: '500'
+                }}>
                   {stock.short_volume.toLocaleString()} shares
                 </div>
               </div>
@@ -124,15 +206,22 @@ const TopShortedStocks: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-500 py-8">
-          <TrendingDown className="h-8 w-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">No data available for selected date</p>
+        <div style={{ 
+          textAlign: 'center', 
+          color: 'var(--text-muted)', 
+          padding: '2rem 0' 
+        }}>
+          <TrendingDown className="h-8 w-8 mx-auto" style={{ 
+            marginBottom: '0.5rem', 
+            opacity: 0.5 
+          }} />
+          <p style={{ fontSize: '0.875rem', margin: 0 }}>No data available for selected date</p>
         </div>
       )}
 
       {stocks.length > 10 && (
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
             Showing top 10 of {stocks.length} stocks
           </p>
         </div>
