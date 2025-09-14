@@ -6,6 +6,7 @@ import SymbolChart from './components/SymbolChart';
 import TopShortedStocks from './components/TopShortedStocks';
 import StatsDashboard from './components/StatsDashboard';
 import DataManagement from './components/DataManagement';
+import { API_BASE_URL } from './config';
 import './App.css';
 
 interface Stats {
@@ -26,7 +27,7 @@ function App() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/stats');
+      const response = await fetch(`${API_BASE_URL}/api/stats`);
       const data = await response.json();
       if (data.success) {
         setStats(data.stats);

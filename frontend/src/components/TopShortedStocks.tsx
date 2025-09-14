@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingDown, Calendar } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface StockData {
   symbol: string;
@@ -28,7 +29,7 @@ const TopShortedStocks: React.FC = () => {
 
   const fetchAvailableDates = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/data/dates');
+      const response = await axios.get(`${API_BASE_URL}/api/data/dates`);
       console.log('📅 Fetched dates from API:', response.data);
       if (response.data.success && response.data.dates.length > 0) {
         const dates = response.data.dates;
@@ -46,7 +47,7 @@ const TopShortedStocks: React.FC = () => {
     setError(null);
     
     try {
-      const response = await axios.get(`http://localhost:3001/api/data/top-shorted/${selectedDate}?limit=20`);
+      const response = await axios.get(`${API_BASE_URL}/api/data/top-shorted/${selectedDate}?limit=20`);
       if (response.data.success) {
         setStocks(response.data.data);
       }

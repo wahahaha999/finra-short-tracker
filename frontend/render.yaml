@@ -5,7 +5,7 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://finra-backend.onrender.com
+        value: https://finra-short-tracker.onrender.com
     routes:
       - type: rewrite
         source: /*

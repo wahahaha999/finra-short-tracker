@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Download, Loader2, Calendar } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface DataDownloaderProps {
   onDownloadComplete: () => void;
@@ -18,7 +19,7 @@ const DataDownloader: React.FC<DataDownloaderProps> = ({ onDownloadComplete }) =
     
     try {
       const payload = useCustomDate && selectedDate ? { date: selectedDate } : {};
-      const response = await axios.post('http://localhost:3001/api/download', payload, {
+      const response = await axios.post(`${API_BASE_URL}/api/download`, payload, {
         timeout: 180000 // 3 minutes timeout
       });
       

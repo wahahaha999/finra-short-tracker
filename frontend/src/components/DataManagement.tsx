@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Trash2, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface DataManagementProps {
   onDataCleared?: () => void;
@@ -18,7 +19,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataCleared }) => {
     setMessage('');
     
     try {
-      const response = await axios.delete('http://localhost:3001/api/data/clear-old', {
+      const response = await axios.delete(`${API_BASE_URL}/api/data/clear-old`, {
         data: { daysToKeep }
       });
       
@@ -42,7 +43,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataCleared }) => {
     setMessage('');
     
     try {
-      const response = await axios.delete('http://localhost:3001/api/data/clear');
+      const response = await axios.delete(`${API_BASE_URL}/api/data/clear`);
       
       if (response.data.success) {
         setMessage(`✅ ${response.data.message}`);

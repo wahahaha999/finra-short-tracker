@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface SymbolChartProps {
   symbol: string;
@@ -30,7 +31,7 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
     setError(null);
     
     try {
-      const response = await axios.get(`http://localhost:3001/api/data/symbol/${symbol}?limit=90`);
+      const response = await axios.get(`${API_BASE_URL}/api/data/symbol/${symbol}?limit=90`);
       if (response.data.success) {
         const sortedData = response.data.data
           .map((item: any) => ({

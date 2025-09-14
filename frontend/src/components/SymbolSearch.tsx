@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface SymbolSearchProps {
   onSymbolSelect: (symbol: string) => void;
@@ -30,7 +31,7 @@ const SymbolSearch: React.FC<SymbolSearchProps> = ({ onSymbolSelect }) => {
   const fetchSuggestions = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:3001/api/search/symbols?q=${searchTerm}`);
+      const response = await axios.get(`${API_BASE_URL}/api/search/symbols?q=${searchTerm}`);
       setSuggestions(response.data.symbols || []);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
