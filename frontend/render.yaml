@@ -1,6 +1,6 @@
 services:
   - type: static_site
-    name: finra-frontend
+    name: frontend-finra-short-tracker-1
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
