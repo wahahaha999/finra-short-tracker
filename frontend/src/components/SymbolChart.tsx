@@ -204,21 +204,23 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
-                {data.slice(-10).reverse().map((item, index) => {
+                {data.slice(-20).reverse().map((item, index) => {
                   const buyVolume = item.total_volume - item.short_volume;
                   const buyRatio = (item.short_volume / buyVolume);
                   const shortRatio = (item.short_volume / item.total_volume);
                   const isEven = index % 2 === 0;
                   // Remove unused variable
                   const formattedDate = `${item.date.slice(4, 6)}/${item.date.slice(6, 8)}/${item.date.slice(0, 4)}`;
-                  const reversedData = data.slice(-10).reverse();
+                  const reversedData = data.slice(-20).reverse();
                   const previousItem = reversedData[index + 1];
                   const isVolumeIncreased = previousItem && item.total_volume > previousItem.total_volume;
                   const isBuyRatioHigh = buyRatio > 1;
         const isPctBuyHigh = (shortRatio * 100) > 55;
                   const isBoughtIncreased = previousItem && item.short_volume > previousItem.short_volume;
                   const allConditionsGreen = isBoughtIncreased && isVolumeIncreased && isBuyRatioHigh && isPctBuyHigh;
-                  const isTrimCondition = buyRatio < 1 && (shortRatio * 100) < 50;
+                  // New trim formula: (Sold/Total*100) + (20*ABS(Sold-Bought)/Total)
+                  const trimScore = (item.short_volume / item.total_volume * 100) + (20 * Math.abs(item.short_volume - buyVolume) / item.total_volume);
+                  const isTrimCondition = trimScore > 70; // Threshold for trim signal
                   return (
                     <tr key={index} className="hover:bg-gray-600 transition-colors duration-150" style={{ backgroundColor: isEven ? '#111827' : '#374151' }}>
                        <td className="px-12 py-4 text-sm font-medium text-center border-r border-gray-700" style={{ color: 'var(--text-primary)', textAlign: 'center' }}>
