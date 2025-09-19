@@ -191,6 +191,7 @@ class DataService {
                CAST(short_volume AS FLOAT) / NULLIF(total_volume, 0) * 100 as actual_ratio
         FROM short_sale_data 
         WHERE date = ? 
+        AND total_volume > 1000000
         ORDER BY short_ratio DESC 
         LIMIT ?
       `;

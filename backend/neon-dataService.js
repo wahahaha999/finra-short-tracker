@@ -214,6 +214,7 @@ class NeonDataService {
                (short_volume::float / NULLIF(total_volume, 0)) * 100 as short_ratio
         FROM short_sale_data 
         WHERE date = ${date} 
+        AND total_volume > 1000000
         ORDER BY short_ratio DESC 
         LIMIT ${limit}
       `;
