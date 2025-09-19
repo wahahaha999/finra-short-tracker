@@ -1,4 +1,4 @@
-# FINRA Short Sale Tracker
+# Dark Pool Intel
 
 A comprehensive web application for tracking and analyzing FINRA short sale data. The application automatically downloads daily short sale data from FINRA and provides powerful analysis tools for stock market research.
 
@@ -37,7 +37,7 @@ A comprehensive web application for tracking and analyzing FINRA short sale data
 
 1. **Clone the repository**
    ```bash
-   cd /Users/user/Documents/finra-short-tracker
+   cd /Users/user/Documents/dark-pool-intel
    ```
 
 2. **Install backend dependencies**

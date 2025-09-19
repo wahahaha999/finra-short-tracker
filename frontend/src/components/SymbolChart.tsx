@@ -218,9 +218,6 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
         const isPctBuyHigh = (shortRatio * 100) > 55;
                   const isBoughtIncreased = previousItem && item.short_volume > previousItem.short_volume;
                   const allConditionsGreen = isBoughtIncreased && isVolumeIncreased && isBuyRatioHigh && isPctBuyHigh;
-                  // New trim formula: (Sold/Total*100) + (20*ABS(Sold-Bought)/Total)
-                  const trimScore = (item.short_volume / item.total_volume * 100) + (20 * Math.abs(item.short_volume - buyVolume) / item.total_volume);
-                  const isTrimCondition = trimScore > 70; // Threshold for trim signal
                   return (
                     <tr key={index} className="hover:bg-gray-600 transition-colors duration-150" style={{ backgroundColor: isEven ? '#111827' : '#374151' }}>
                        <td className="px-12 py-4 text-sm font-medium text-center border-r border-gray-700" style={{ color: 'var(--text-primary)', textAlign: 'center' }}>
@@ -248,10 +245,6 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
                          {allConditionsGreen ? (
                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-900/50 border border-green-700" style={{ color: '#10b981', fontWeight: 'bold', fontSize: '14px' }}>
                              BUY
-                           </span>
-                         ) : isTrimCondition ? (
-                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-900/50 border border-red-700" style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '14px' }}>
-                             TRIM
                            </span>
                          ) : (
                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-900/50 border border-gray-700" style={{ color: 'white' }}>

@@ -1,4 +1,4 @@
-# 🚀 FINRA Short Tracker - Render Deployment Guide
+# 🚀 Dark Pool Intel - Render Deployment Guide
 
 ## Prerequisites
 ✅ Render account (free)
@@ -11,7 +11,7 @@
 
 1. Go to [GitHub.com](https://github.com) and sign in
 2. Click **"New repository"** (green button)
-3. Name it: `finra-short-tracker`
+3. Name it: `dark-pool-intel`
 4. Make it **Public** (required for free Render)
 5. Click **"Create repository"**
 6. Upload your project folder to this repository
@@ -120,7 +120,7 @@ Check your backend logs for successful database connection
 
 ## 🎉 You're Done!
 
-**Your FINRA Short Tracker is now live with:**
+**Your Dark Pool Intel is now live with:**
 - ✅ Always-on backend API
 - ✅ Beautiful frontend website
 - ✅ Automatic daily data fetching
@@ -151,4 +151,4 @@ Check your backend logs for successful database connection
 - **Updates**: Push to GitHub to auto-deploy updates
 - **Custom domains**: Available on paid plans
 
-**Congratulations! Your FINRA project is now deployed professionally! 🎊**
+**Congratulations! Your Dark Pool Intel project is now deployed professionally! 🎊**
