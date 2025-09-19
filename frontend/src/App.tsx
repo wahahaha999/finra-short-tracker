@@ -75,7 +75,7 @@ function App() {
                   fontSize: '1rem', 
                   color: 'var(--text-secondary)',
                   margin: 0
-                }}>Data provided by Financial Industry Regulatory Authority</p>
+                }}>Data provided by FINRA and Proprietary Algorithm by Franck</p>
               </div>
             </div>
             <div className="flex items-center space-x-6">

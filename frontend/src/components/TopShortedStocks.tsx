@@ -124,7 +124,7 @@ const TopShortedStocks: React.FC = () => {
           }}>
             <TrendingDown className="h-5 w-5" style={{ color: 'white' }} />
           </div>
-          Top Short Volume
+          Top Dark Volume
         </h2>
         {availableDates.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
