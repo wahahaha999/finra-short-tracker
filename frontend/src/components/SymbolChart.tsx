@@ -215,9 +215,20 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
                   const previousItem = reversedData[index + 1];
                   const isVolumeIncreased = previousItem && item.total_volume > previousItem.total_volume;
                   const isBuyRatioHigh = buyRatio > 1;
-        const isPctBuyHigh = (shortRatio * 100) > 55;
+                  const isBuyRatioVeryLow = buyRatio < 0.49;
+                  const isPctBuyHigh = (shortRatio * 100) > 55;
                   const isBoughtIncreased = previousItem && item.short_volume > previousItem.short_volume;
                   const allConditionsGreen = isBoughtIncreased && isVolumeIncreased && isBuyRatioHigh && isPctBuyHigh;
+                  
+                  // Sell signal conditions
+                  const isSoldIncreased = previousItem && item.short_volume > previousItem.short_volume;
+                  const isBuyRatioLow = buyRatio < 0.5;
+                  const isPctBuyLow = (shortRatio * 100) < 45;
+                  const allConditionsRed = isSoldIncreased && isVolumeIncreased && isBuyRatioLow && isPctBuyLow;
+                  
+                  // Check if sold volume (buyVolume) increased
+                  const previousBuyVolume = previousItem ? (previousItem.total_volume - previousItem.short_volume) : 0;
+                  const isSoldVolumeIncreased = previousItem && buyVolume > previousBuyVolume;
                   return (
                     <tr key={index} className="hover:bg-gray-600 transition-colors duration-150" style={{ backgroundColor: isEven ? '#111827' : '#374151' }}>
                        <td className="px-12 py-4 text-sm font-medium text-center border-r border-gray-700" style={{ color: 'var(--text-primary)', textAlign: 'center' }}>
@@ -229,13 +240,13 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
                        <td className="px-12 py-4 text-sm text-center border-r border-gray-700" style={{ color: isBoughtIncreased ? '#10b981' : 'var(--text-primary)', fontWeight: isBoughtIncreased ? 'bold' : 'normal', textAlign: 'center' }}>
                          {item.short_volume.toLocaleString()}
                        </td>
-                       <td className="px-12 py-4 text-sm font-semibold text-center border-r border-gray-700" style={{ color: 'var(--text-primary)', textAlign: 'center' }}>
+                       <td className="px-12 py-4 text-sm font-semibold text-center border-r border-gray-700" style={{ color: isSoldVolumeIncreased ? '#ef4444' : 'var(--text-primary)', fontWeight: isSoldVolumeIncreased ? 'bold' : 'normal', textAlign: 'center' }}>
                          {buyVolume.toLocaleString()}
                        </td>
                        <td className="px-12 py-4 text-sm font-semibold text-center border-r border-gray-700" style={{ color: isVolumeIncreased ? '#10b981' : 'var(--text-primary)', fontWeight: isVolumeIncreased ? 'bold' : 'normal', textAlign: 'center' }}>
                          {item.total_volume.toLocaleString()}
                        </td>
-                       <td className="px-12 py-4 text-sm font-medium text-center border-r border-gray-700" style={{ color: isBuyRatioHigh ? '#10b981' : 'var(--text-primary)', fontWeight: isBuyRatioHigh ? 'bold' : 'normal', textAlign: 'center' }}>
+                       <td className="px-12 py-4 text-sm font-medium text-center border-r border-gray-700" style={{ color: isBuyRatioHigh ? '#10b981' : isBuyRatioVeryLow ? '#ef4444' : 'var(--text-primary)', fontWeight: (isBuyRatioHigh || isBuyRatioVeryLow) ? 'bold' : 'normal', textAlign: 'center' }}>
                          {buyRatio.toFixed(3)}
                        </td>
                        <td className="px-12 py-4 text-sm font-medium text-center border-r border-gray-700" style={{ color: isPctBuyHigh ? '#10b981' : 'var(--text-primary)', fontWeight: isPctBuyHigh ? 'bold' : 'normal', textAlign: 'center' }}>
@@ -245,6 +256,10 @@ const SymbolChart: React.FC<SymbolChartProps> = ({ symbol }) => {
                          {allConditionsGreen ? (
                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-900/50 border border-green-700" style={{ color: '#10b981', fontWeight: 'bold', fontSize: '14px' }}>
                              BUY
+                           </span>
+                         ) : allConditionsRed ? (
+                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-900/50 border border-red-700" style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '14px' }}>
+                             SELL
                            </span>
                          ) : (
                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-900/50 border border-gray-700" style={{ color: 'white' }}>
